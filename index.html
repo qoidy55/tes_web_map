@@ -2,20 +2,104 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-</head>
-<body>
-        <script>
-            // Redirect ke demo.html hanya jika tidak ada ?app=1 di URL
-            if (!window.location.search.includes('app=1')) {
-                window.location.href = "demo.html";
-            }
-        </script>
-    <title>Redirecting...</title>
-</head>
-<body>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebGIS Yogyakarta - OpenLayers</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@8.2.0/ol.css" type="text/css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script>
+      // Redirect ke demo.html hanya jika tidak ada ?app=1 di URL
+      if (!window.location.search.includes('app=1')) {
         window.location.href = "demo.html";
+      }
     </script>
-    <p>Redirecting ke halaman demo...</p>
+</head>
+<body>
+    <div id="header">
+        <h1><i class="fas fa-map-marked-alt"></i> WebGIS Yogyakarta</h1>
+        <div id="coordinates"></div>
+    </div>
+
+    <div id="sidebar">
+        <div class="panel">
+            <h3><i class="fas fa-layer-group"></i> Layer Control</h3>
+            <div id="layer-controls">
+                <div class="layer-item">
+                    <input type="checkbox" id="basemap-osm" checked>
+                    <label for="basemap-osm">OpenStreetMap</label>
+                </div>
+                <div class="layer-item">
+                    <input type="checkbox" id="basemap-satellite" >
+                    <label for="basemap-satellite">Satellite</label>
+                </div>
+                <div class="layer-item">
+                    <input type="checkbox" id="layer-points" checked>
+                    <label for="layer-points">Tempat Wisata</label>
+                </div>
+                <div class="layer-item">
+                    <input type="checkbox" id="layer-roads" checked>
+                    <label for="layer-roads">Jalan Utama</label>
+                </div>
+                <div class="layer-item">
+                    <input type="checkbox" id="layer-districts" checked>
+                    <label for="layer-districts">Kecamatan</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h3><i class="fas fa-tools"></i> Tools</h3>
+            <div id="tools">
+                <button id="btn-draw-point" class="tool-btn">
+                    <i class="fas fa-map-pin"></i> Tambah Titik
+                </button>
+                <button id="btn-draw-line" class="tool-btn">
+                    <i class="fas fa-route"></i> Tambah Garis
+                </button>
+                <button id="btn-draw-polygon" class="tool-btn">
+                    <i class="fas fa-draw-polygon"></i> Tambah Polygon
+                </button>
+                <button id="btn-measure-distance" class="tool-btn">
+                    <i class="fas fa-ruler"></i> Ukur Jarak
+                </button>
+                <button id="btn-measure-area" class="tool-btn">
+                    <i class="fas fa-crop-alt"></i> Ukur Area
+                </button>
+                <button id="btn-clear" class="tool-btn danger">
+                    <i class="fas fa-trash"></i> Hapus Semua
+                </button>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h3><i class="fas fa-search"></i> Pencarian</h3>
+            <div id="search-panel">
+                <input type="text" id="search-input" placeholder="Cari lokasi...">
+                <button id="btn-search"><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h3><i class="fas fa-info-circle"></i> Informasi</h3>
+            <div id="info-panel">
+                <p>Klik pada peta untuk melihat informasi lokasi</p>
+                <div id="feature-info"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="map-container">
+        <div id="map"></div>
+        <div id="popup" class="ol-popup">
+            <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+            <div id="popup-content"></div>
+        </div>
+    </div>
+
+    <div id="measurement-tooltip" class="measurement-tooltip"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/ol@8.2.0/dist/ol.js"></script>
+    <script src="data.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
