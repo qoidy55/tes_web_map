@@ -2,7 +2,14 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0; url=demo.html">
+</head>
+<body>
+        <script>
+            // Redirect ke demo.html hanya jika tidak ada ?app=1 di URL
+            if (!window.location.search.includes('app=1')) {
+                window.location.href = "demo.html";
+            }
+        </script>
     <title>Redirecting...</title>
 </head>
 <body>
