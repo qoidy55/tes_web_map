@@ -1,5 +1,6 @@
 // Aplikasi WebGIS Yogyakarta menggunakan OpenLayers
 
+
 // Inisialisasi variabel global
 let map;
 let vectorLayers = {};
@@ -7,6 +8,25 @@ let interactions = {};
 let currentTool = null;
 let popup;
 let measureTooltip;
+
+// Daftar tema dan tipe geometrinya
+const THEMES = [
+    { name: 'transportasi', label: 'Transportasi' },
+    { name: 'wisata', label: 'Wisata' }
+    // Tambahkan tema lain jika ada
+];
+const GEOMETRIES = [
+    { type: 'points', label: 'Titik' },
+    { type: 'lines', label: 'Garis' },
+    { type: 'polygons', label: 'Poligon' }
+];
+
+// Helper untuk load GeoJSON
+async function loadGeoJSON(url) {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('Gagal fetch ' + url);
+    return await response.json();
+}
 
 // Inisialisasi peta saat halaman dimuat
 document.addEventListener('DOMContentLoaded', function() {
@@ -140,14 +160,14 @@ function initializeMap() {
 }
 
 // Fungsi untuk setup layers
-function setupLayers() {
+
+async function setupLayers() {
     // Base maps
     const osmLayer = new ol.layer.Tile({
         source: new ol.source.OSM(),
         title: 'OpenStreetMap',
         type: 'base'
     });
-
     const satelliteLayer = new ol.layer.Tile({
         source: new ol.source.XYZ({
             url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
@@ -157,169 +177,96 @@ function setupLayers() {
         type: 'base',
         visible: false
     });
-
     map.addLayer(osmLayer);
     map.addLayer(satelliteLayer);
 
     // Style functions
-    const pointStyle = new ol.style.Style({
-        image: new ol.style.Circle({
-            radius: 8,
-            fill: new ol.style.Fill({color: '#ff4444'}),
-            stroke: new ol.style.Stroke({color: '#ffffff', width: 2})
-        })
-    });
-
-    const lineStyle = new ol.style.Style({
-        stroke: new ol.style.Stroke({
-            color: '#0066cc',
-            width: 3
-        })
-    });
-
-    const polygonStyle = new ol.style.Style({
-        fill: new ol.style.Fill({
-            color: 'rgba(0, 100, 200, 0.2)'
-        }),
-        stroke: new ol.style.Stroke({
-            color: '#0066cc',
-            width: 2
-        })
-    });
-
-    // Tourist spots layer
-    let pointsFeatures = [];
-    try {
-        pointsFeatures = new ol.format.GeoJSON().readFeatures(window.touristSpots, {
-            featureProjection: 'EPSG:3857'
+    function getPointStyle(feature) {
+        const category = feature.get('category');
+        let color = '#ff4444';
+        switch(category) {
+            case 'Sejarah': color = '#8B4513'; break;
+            case 'Budaya': color = '#FF6347'; break;
+            case 'Alam': color = '#32CD32'; break;
+            case 'Belanja': color = '#FFD700'; break;
+            case 'Petualangan': color = '#FF4500'; break;
+            default: color = '#ff4444';
+        }
+        return new ol.style.Style({
+            image: new ol.style.Circle({
+                radius: 10,
+                fill: new ol.style.Fill({color: color}),
+                stroke: new ol.style.Stroke({color: '#ffffff', width: 2})
+            }),
+            text: new ol.style.Text({
+                text: feature.get('name'),
+                offsetY: -25,
+                fill: new ol.style.Fill({color: '#000'}),
+                stroke: new ol.style.Stroke({color: '#fff', width: 2}),
+                font: '12px Arial'
+            })
         });
-    } catch (e) {
-        console.error('Gagal load data titik:', e);
     }
-    vectorLayers.points = new ol.layer.Vector({
-        source: new ol.source.Vector({
-            features: pointsFeatures
-        }),
-        style: function(feature) {
-            const category = feature.get('category');
-            let color = '#ff4444';
-            
-            switch(category) {
-                case 'Sejarah': color = '#8B4513'; break;
-                case 'Budaya': color = '#FF6347'; break;
-                case 'Alam': color = '#32CD32'; break;
-                case 'Belanja': color = '#FFD700'; break;
-                case 'Petualangan': color = '#FF4500'; break;
-                default: color = '#ff4444';
+    function getLineStyle(feature) {
+        const roadType = feature.get('type');
+        let color = '#0066cc';
+        let width = 3;
+        switch(roadType) {
+            case 'Jalan Provinsi': color = '#FF6B35'; width = 4; break;
+            case 'Jalan Kota': color = '#4ECDC4'; width = 5; break;
+            case 'Jalan Kabupaten': color = '#45B7D1'; width = 3; break;
+        }
+        return new ol.style.Style({
+            stroke: new ol.style.Stroke({ color, width })
+        });
+    }
+    function getPolygonStyle(feature) {
+        const population = feature.get('population');
+        let opacity = 0.1;
+        if (population > 100000) opacity = 0.4;
+        else if (population > 50000) opacity = 0.3;
+        else if (population > 20000) opacity = 0.2;
+        return new ol.style.Style({
+            fill: new ol.style.Fill({ color: `rgba(34, 139, 34, ${opacity})` }),
+            stroke: new ol.style.Stroke({ color: '#228B22', width: 2 }),
+            text: new ol.style.Text({
+                text: feature.get('name'),
+                fill: new ol.style.Fill({color: '#000'}),
+                stroke: new ol.style.Stroke({color: '#fff', width: 2}),
+                font: 'bold 14px Arial'
+            })
+        });
+    }
+
+    // Layer loader berdasarkan folder data
+    for (const theme of THEMES) {
+        for (const geom of GEOMETRIES) {
+            const url = `data/${theme.name}/${geom.type}.geojson`;
+            try {
+                const data = await loadGeoJSON(url);
+                const features = new ol.format.GeoJSON().readFeatures(data, { featureProjection: 'EPSG:3857' });
+                let styleFn = null;
+                if (geom.type === 'points') styleFn = getPointStyle;
+                else if (geom.type === 'lines') styleFn = getLineStyle;
+                else if (geom.type === 'polygons') styleFn = getPolygonStyle;
+                const layerKey = `${theme.name}_${geom.type}`;
+                vectorLayers[layerKey] = new ol.layer.Vector({
+                    source: new ol.source.Vector({ features }),
+                    style: styleFn,
+                    title: `${theme.label} - ${geom.label}`
+                });
+                map.addLayer(vectorLayers[layerKey]);
+            } catch (e) {
+                console.warn(`Tidak dapat memuat ${url}:`, e.message);
             }
-            
-            return new ol.style.Style({
-                image: new ol.style.Circle({
-                    radius: 10,
-                    fill: new ol.style.Fill({color: color}),
-                    stroke: new ol.style.Stroke({color: '#ffffff', width: 2})
-                }),
-                text: new ol.style.Text({
-                    text: feature.get('name'),
-                    offsetY: -25,
-                    fill: new ol.style.Fill({color: '#000'}),
-                    stroke: new ol.style.Stroke({color: '#fff', width: 2}),
-                    font: '12px Arial'
-                })
-            });
-        },
-        title: 'Tourist Spots'
-    });
-
-    // Roads layer
-    let roadsFeatures = [];
-    try {
-        roadsFeatures = new ol.format.GeoJSON().readFeatures(window.mainRoads, {
-            featureProjection: 'EPSG:3857'
-        });
-    } catch (e) {
-        console.error('Gagal load data jalan:', e);
+        }
     }
-    vectorLayers.roads = new ol.layer.Vector({
-        source: new ol.source.Vector({
-            features: roadsFeatures
-        }),
-        style: function(feature) {
-            const roadType = feature.get('type');
-            let color = '#0066cc';
-            let width = 3;
-            
-            switch(roadType) {
-                case 'Jalan Provinsi': 
-                    color = '#FF6B35'; 
-                    width = 4; 
-                    break;
-                case 'Jalan Kota': 
-                    color = '#4ECDC4'; 
-                    width = 5; 
-                    break;
-                case 'Jalan Kabupaten': 
-                    color = '#45B7D1'; 
-                    width = 3; 
-                    break;
-            }
-            
-            return new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                    color: color,
-                    width: width
-                })
-            });
-        },
-        title: 'Roads'
-    });
 
-    // Districts layer
-    let districtsFeatures = [];
-    try {
-        districtsFeatures = new ol.format.GeoJSON().readFeatures(window.districts, {
-            featureProjection: 'EPSG:3857'
-        });
-    } catch (e) {
-        console.error('Gagal load data kecamatan:', e);
-    }
-    vectorLayers.districts = new ol.layer.Vector({
-        source: new ol.source.Vector({
-            features: districtsFeatures
-        }),
-        style: function(feature) {
-            const population = feature.get('population');
-            let opacity = 0.1;
-            
-            if (population > 100000) opacity = 0.4;
-            else if (population > 50000) opacity = 0.3;
-            else if (population > 20000) opacity = 0.2;
-            
-            return new ol.style.Style({
-                fill: new ol.style.Fill({
-                    color: `rgba(34, 139, 34, ${opacity})`
-                }),
-                stroke: new ol.style.Stroke({
-                    color: '#228B22',
-                    width: 2
-                }),
-                text: new ol.style.Text({
-                    text: feature.get('name'),
-                    fill: new ol.style.Fill({color: '#000'}),
-                    stroke: new ol.style.Stroke({color: '#fff', width: 2}),
-                    font: 'bold 14px Arial'
-                })
-            });
-        },
-        title: 'Districts'
-    });
-
-    // Drawing layer
+    // Drawing layer (tetap manual)
     vectorLayers.drawing = new ol.layer.Vector({
         source: new ol.source.Vector(),
         style: function(feature) {
             const geometryType = feature.getGeometry().getType();
-            
             switch(geometryType) {
                 case 'Point':
                     return new ol.style.Style({
@@ -350,42 +297,9 @@ function setupLayers() {
         },
         title: 'User Drawings'
     });
-
-    // Add layers to map
-    map.addLayer(vectorLayers.districts);
-    map.addLayer(vectorLayers.roads);
-    map.addLayer(vectorLayers.points);
     map.addLayer(vectorLayers.drawing);
 
-    // Layer controls
-    document.getElementById('basemap-osm').addEventListener('change', function() {
-        osmLayer.setVisible(this.checked);
-        if (this.checked) {
-            satelliteLayer.setVisible(false);
-            document.getElementById('basemap-satellite').checked = false;
-        }
-    });
-
-    document.getElementById('basemap-satellite').addEventListener('change', function() {
-        satelliteLayer.setVisible(this.checked);
-        if (this.checked) {
-            osmLayer.setVisible(false);
-            document.getElementById('basemap-osm').checked = false;
-        }
-    });
-
-    document.getElementById('layer-points').addEventListener('change', function() {
-        vectorLayers.points.setVisible(this.checked);
-    });
-
-    document.getElementById('layer-roads').addEventListener('change', function() {
-        vectorLayers.roads.setVisible(this.checked);
-    });
-
-    document.getElementById('layer-districts').addEventListener('change', function() {
-        vectorLayers.districts.setVisible(this.checked);
-    });
-
+    // Layer controls (opsional: bisa diadaptasi untuk layer dinamis)
     // Zoom ke extent Yogyakarta agar peta pasti tampil
     setTimeout(function() {
         if (window.yogyakartaBounds) {

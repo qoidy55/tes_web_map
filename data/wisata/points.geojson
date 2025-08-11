@@ -1,0 +1,13 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {"type": "Feature","geometry":{"type":"Point","coordinates":[110.3659,-7.8014]},"properties":{"name":"Candi Borobudur","type":"Candi","description":"Candi Buddha terbesar di dunia dan Situs Warisan Dunia UNESCO","category":"Sejarah","rating":4.8,"visitors_per_year":2500000,"entrance_fee":"IDR 50,000"}},
+    {"type": "Feature","geometry":{"type":"Point","coordinates":[110.4453,-7.7520]},"properties":{"name":"Candi Prambanan","type":"Candi","description":"Kompleks candi Hindu terbesar di Indonesia","category":"Sejarah","rating":4.7,"visitors_per_year":1800000,"entrance_fee":"IDR 40,000"}},
+    {"type": "Feature","geometry":{"type":"Point","coordinates":[110.3695,-7.7956]},"properties":{"name":"Keraton Yogyakarta","type":"Istana","description":"Istana residen Sultan Yogyakarta","category":"Budaya","rating":4.5,"visitors_per_year":1200000,"entrance_fee":"IDR 15,000"}},
+    {"type": "Feature","geometry":{"type":"Point","coordinates":[110.3657,-7.7989]},"properties":{"name":"Jalan Malioboro","type":"Jalan","description":"Jalan utama dan pusat perbelanjaan di Yogyakarta","category":"Belanja","rating":4.6,"visitors_per_year":3000000,"entrance_fee":"Gratis"}},
+    {"type": "Feature","geometry":{"type":"Point","coordinates":[110.3913,-7.7680]},"properties":{"name":"Tugu Yogyakarta","type":"Monumen","description":"Tugu bersejarah sebagai simbol Yogyakarta","category":"Sejarah","rating":4.2,"visitors_per_year":800000,"entrance_fee":"Gratis"}},
+    {"type": "Feature","geometry":{"type":"Point","coordinates":[110.4086,-7.8731]},"properties":{"name":"Pantai Parangtritis","type":"Pantai","description":"Pantai dengan legenda Nyi Roro Kidul","category":"Alam","rating":4.4,"visitors_per_year":2200000,"entrance_fee":"IDR 5,000"}},
+    {"type": "Feature","geometry":{"type":"Point","coordinates":[110.3167,-7.9106]},"properties":{"name":"Goa Jomblang","type":"Goa","description":"Goa vertikal dengan cahaya surga yang terkenal","category":"Petualangan","rating":4.7,"visitors_per_year":150000,"entrance_fee":"IDR 450,000"}},
+    {"type": "Feature","geometry":{"type":"Point","coordinates":[110.4167,-7.7333]},"properties":{"name":"Candi Sambisari","type":"Candi","description":"Candi Hindu yang tersembunyi di bawah tanah","category":"Sejarah","rating":4.3,"visitors_per_year":45000,"entrance_fee":"IDR 10,000"}}
+  ]
+}

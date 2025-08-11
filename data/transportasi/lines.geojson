@@ -1,0 +1,9 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {"type": "Feature","geometry":{"type":"LineString","coordinates":[[110.3600,-7.8100],[110.3650,-7.8000],[110.3680,-7.7950],[110.3695,-7.7956],[110.3657,-7.7989],[110.3700,-7.7980],[110.3800,-7.7900],[110.4000,-7.7700],[110.4200,-7.7600],[110.4453,-7.7520]]},"properties":{"name":"Jalan Yogya-Magelang","type":"Jalan Provinsi","length_km":45.2,"surface":"Aspal","lanes":4,"speed_limit":60,"condition":"Baik"}},
+    {"type": "Feature","geometry":{"type":"LineString","coordinates":[[110.3657,-7.7989],[110.3700,-7.8100],[110.3800,-7.8200],[110.3900,-7.8400],[110.4000,-7.8600],[110.4086,-7.8731]]},"properties":{"name":"Jalan Yogya-Parangtritis","type":"Jalan Kabupaten","length_km":28.5,"surface":"Aspal","lanes":2,"speed_limit":50,"condition":"Baik"}},
+    {"type": "Feature","geometry":{"type":"LineString","coordinates":[[110.3200,-7.7500],[110.3400,-7.7600],[110.3600,-7.7700],[110.3695,-7.7956],[110.3800,-7.8000],[110.4000,-7.8100],[110.4200,-7.8200],[110.4500,-7.8300]]},"properties":{"name":"Jalan Ring Road Utara","type":"Jalan Kota","length_km":35.8,"surface":"Aspal","lanes":6,"speed_limit":70,"condition":"Sangat Baik"}},
+    {"type": "Feature","geometry":{"type":"LineString","coordinates":[[110.3000,-7.8500],[110.3200,-7.8400],[110.3400,-7.8300],[110.3600,-7.8200],[110.3800,-7.8100],[110.4000,-7.8000],[110.4200,-7.7900],[110.4400,-7.7800]]},"properties":{"name":"Jalan Ring Road Selatan","type":"Jalan Kota","length_km":32.1,"surface":"Aspal","lanes":4,"speed_limit":60,"condition":"Baik"}}
+  ]
+}
