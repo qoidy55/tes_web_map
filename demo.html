@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Fitur WebGIS Yogyakarta</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: #f8f9fa;
+        }
+        
+        .demo-container {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .feature-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .feature-card h3 {
+            color: #495057;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .feature-card i {
+            color: #007bff;
+            font-size: 1.2em;
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            position: relative;
+            padding-left: 20px;
+        }
+        
+        .feature-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #28a745;
+            font-weight: bold;
+        }
+        
+        .btn-demo {
+            display: inline-block;
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin: 10px 0;
+        }
+        
+        .btn-demo:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,123,255,0.3);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .data-showcase {
+            background: #e8f4f8;
+            border-left: 4px solid #17a2b8;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .tech-item {
+            background: #6c757d;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+        
+        .screenshot-placeholder {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 200px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2em;
+            margin: 20px 0;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .stat-item {
+            text-align: center;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #007bff;
+            display: block;
+        }
+        
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="demo-container">
+        <h1><i class="fas fa-map-marked-alt"></i> WebGIS Yogyakarta - Demo Fitur</h1>
+        
+        <div class="stats-grid">
+            <div class="stat-item">
+                <span class="stat-number">8</span>
+                <span class="stat-label">Tempat Wisata</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">4</span>
+                <span class="stat-label">Jalan Utama</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">6</span>
+                <span class="stat-label">Kecamatan</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">15+</span>
+                <span class="stat-label">Fitur Tools</span>
+            </div>
+        </div>
+        
+        <div class="data-showcase">
+            <h3><i class="fas fa-database"></i> Data Sample Yogyakarta</h3>
+            <p>Aplikasi ini menampilkan data geografis komprehensif untuk wilayah Yogyakarta, termasuk tempat wisata populer, jaringan jalan utama, dan batas administratif kecamatan dengan informasi demografis lengkap.</p>
+        </div>
+        
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h3><i class="fas fa-map"></i> Peta Interaktif</h3>
+                <ul class="feature-list">
+                    <li>OpenStreetMap & Satellite basemap</li>
+                    <li>Zoom, pan, dan navigasi smooth</li>
+                    <li>Koordinat real-time</li>
+                    <li>Scale bar dan mouse position</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <h3><i class="fas fa-layer-group"></i> Multi-Layer</h3>
+                <ul class="feature-list">
+                    <li>Layer tempat wisata dengan kategori</li>
+                    <li>Jaringan jalan dengan klasifikasi</li>
+                    <li>Batas kecamatan dengan data populasi</li>
+                    <li>Layer kontrol untuk toggle visibility</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <h3><i class="fas fa-draw-polygon"></i> Drawing Tools</h3>
+                <ul class="feature-list">
+                    <li>Tambah titik custom</li>
+                    <li>Gambar garis/rute</li>
+                    <li>Buat area/polygon</li>
+                    <li>Edit dan hapus fitur</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <h3><i class="fas fa-ruler"></i> Measurement</h3>
+                <ul class="feature-list">
+                    <li>Ukur jarak antar titik</li>
+                    <li>Hitung luas area</li>
+                    <li>Satuan meter dan kilometer</li>
+                    <li>Tooltip hasil pengukuran</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <h3><i class="fas fa-search"></i> Pencarian</h3>
+                <ul class="feature-list">
+                    <li>Cari berdasarkan nama</li>
+                    <li>Filter berdasarkan kategori</li>
+                    <li>Auto zoom ke hasil</li>
+                    <li>Panel hasil pencarian</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <h3><i class="fas fa-info-circle"></i> Popup Informasi</h3>
+                <ul class="feature-list">
+                    <li>Detail tempat wisata</li>
+                    <li>Informasi jalan dan transportasi</li>
+                    <li>Data demografis kecamatan</li>
+                    <li>Rating dan biaya masuk</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="data-showcase">
+            <h3><i class="fas fa-star"></i> Fitur Advanced</h3>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3><i class="fas fa-download"></i> Export/Import</h3>
+                    <ul class="feature-list">
+                        <li>Export ke GeoJSON</li>
+                        <li>Export ke KML</li>
+                        <li>Export ke CSV</li>
+                        <li>Import dari berbagai format</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <h3><i class="fas fa-chart-line"></i> Analisis Spasial</h3>
+                    <ul class="feature-list">
+                        <li>Buffer analysis</li>
+                        <li>Point in polygon</li>
+                        <li>Distance calculation</li>
+                        <li>Density analysis</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <h3><i class="fas fa-mobile-alt"></i> Responsive Design</h3>
+                    <ul class="feature-list">
+                        <li>Mobile friendly</li>
+                        <li>Touch gestures</li>
+                        <li>Adaptive layout</li>
+                        <li>Cross-browser support</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="screenshot-placeholder">
+            <i class="fas fa-image"></i> Screenshot WebGIS Interface
+        </div>
+        
+        <div style="text-align: center; margin: 30px 0;">
+            <a href="index.html" class="btn-demo">
+                <i class="fas fa-rocket"></i> Buka Aplikasi WebGIS
+            </a>
+        </div>
+        
+        <div class="data-showcase">
+            <h3><i class="fas fa-code"></i> Teknologi yang Digunakan</h3>
+            <div class="tech-stack">
+                <span class="tech-item">OpenLayers 8.2.0</span>
+                <span class="tech-item">HTML5</span>
+                <span class="tech-item">CSS3</span>
+                <span class="tech-item">JavaScript ES6+</span>
+                <span class="tech-item">GeoJSON</span>
+                <span class="tech-item">Font Awesome</span>
+                <span class="tech-item">Responsive Design</span>
+            </div>
+        </div>
+        
+        <div class="data-showcase">
+            <h3><i class="fas fa-map-marked"></i> Data Coverage</h3>
+            <div class="feature-grid">
+                <div>
+                    <h4>Tempat Wisata:</h4>
+                    <ul class="feature-list">
+                        <li>Candi Borobudur & Prambanan</li>
+                        <li>Keraton Yogyakarta</li>
+                        <li>Jalan Malioboro</li>
+                        <li>Pantai Parangtritis</li>
+                        <li>Goa Jomblang</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4>Infrastruktur:</h4>
+                    <ul class="feature-list">
+                        <li>Jalan Provinsi & Kota</li>
+                        <li>Ring Road Yogyakarta</li>
+                        <li>Rute menuju objek wisata</li>
+                        <li>Data kondisi jalan</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4>Administrasi:</h4>
+                    <ul class="feature-list">
+                        <li>6 Kecamatan utama</li>
+                        <li>Data populasi & kepadatan</li>
+                        <li>Luas wilayah</li>
+                        <li>Aktivitas ekonomi utama</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin: 40px 0; color: #6c757d;">
+            <p><i class="fas fa-heart" style="color: #e74c3c;"></i> Dibuat dengan teknologi open source untuk keperluan edukasi dan demonstrasi</p>
+        </div>
+    </div>
+</body>
+</html>

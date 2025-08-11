@@ -1,0 +1,349 @@
+/* Reset dan Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    height: 100vh;
+    overflow: hidden;
+    background: #f5f5f5;
+}
+
+/* Header */
+#header {
+    background: linear-gradient(135deg, #2c3e50, #3498db);
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+    position: relative;
+}
+
+#header h1 {
+    font-size: 1.5em;
+    font-weight: 600;
+}
+
+#coordinates {
+    font-family: 'Courier New', monospace;
+    background: rgba(255,255,255,0.2);
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.9em;
+}
+
+/* Layout */
+#sidebar {
+    position: fixed;
+    left: 0;
+    top: 60px;
+    width: 300px;
+    height: calc(100vh - 60px);
+    background: white;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    overflow-y: auto;
+    z-index: 1000;
+    border-right: 1px solid #ddd;
+}
+
+#map-container {
+    margin-left: 300px;
+    height: calc(100vh - 60px);
+    position: relative;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+}
+
+/* Sidebar Panels */
+.panel {
+    margin: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    overflow: hidden;
+}
+
+.panel h3 {
+    background: linear-gradient(135deg, #343a40, #495057);
+    color: white;
+    padding: 12px 15px;
+    margin: 0;
+    font-size: 1em;
+    font-weight: 600;
+}
+
+.panel h3 i {
+    margin-right: 8px;
+}
+
+/* Layer Controls */
+#layer-controls {
+    padding: 15px;
+}
+
+.layer-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+    padding: 8px;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+}
+
+.layer-item:hover {
+    background-color: #e9ecef;
+}
+
+.layer-item input[type="checkbox"] {
+    margin-right: 10px;
+    transform: scale(1.2);
+}
+
+.layer-item label {
+    cursor: pointer;
+    font-weight: 500;
+    color: #495057;
+}
+
+/* Tools */
+#tools {
+    padding: 15px;
+    display: grid;
+    gap: 10px;
+}
+
+.tool-btn {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+    border: none;
+    padding: 12px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9em;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tool-btn i {
+    margin-right: 8px;
+}
+
+.tool-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,123,255,0.3);
+}
+
+.tool-btn.active {
+    background: linear-gradient(135deg, #28a745, #1e7e34);
+}
+
+.tool-btn.danger {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+}
+
+.tool-btn.danger:hover {
+    box-shadow: 0 4px 12px rgba(220,53,69,0.3);
+}
+
+/* Search Panel */
+#search-panel {
+    padding: 15px;
+    display: flex;
+    gap: 8px;
+}
+
+#search-input {
+    flex: 1;
+    padding: 10px;
+    border: 2px solid #e9ecef;
+    border-radius: 5px;
+    font-size: 0.9em;
+}
+
+#search-input:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+#btn-search {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Info Panel */
+#info-panel {
+    padding: 15px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+#feature-info {
+    background: white;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #dee2e6;
+    margin-top: 10px;
+    font-size: 0.9em;
+}
+
+/* Popup */
+.ol-popup {
+    position: absolute;
+    background-color: white;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    bottom: 12px;
+    left: -50px;
+    min-width: 280px;
+    max-width: 400px;
+}
+
+.ol-popup:after, .ol-popup:before {
+    top: 100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+
+.ol-popup:after {
+    border-top-color: white;
+    border-width: 10px;
+    left: 48px;
+    margin-left: -10px;
+}
+
+.ol-popup:before {
+    border-top-color: #ccc;
+    border-width: 11px;
+    left: 48px;
+    margin-left: -11px;
+}
+
+.ol-popup-closer {
+    text-decoration: none;
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    color: #aaa;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.ol-popup-closer:hover {
+    color: #000;
+}
+
+/* Measurement Tooltip */
+.measurement-tooltip {
+    position: absolute;
+    background: rgba(0,0,0,0.8);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 12px;
+    pointer-events: none;
+    display: none;
+    z-index: 1001;
+}
+
+/* Map Controls */
+.ol-zoom {
+    top: 20px;
+    left: 20px;
+}
+
+.ol-zoom button {
+    background: white !important;
+    color: #333 !important;
+    border: 1px solid #ccc !important;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2) !important;
+}
+
+.ol-attribution {
+    bottom: 5px;
+    right: 5px;
+    background: rgba(255,255,255,0.9) !important;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    #sidebar {
+        width: 100%;
+        height: 200px;
+        top: 60px;
+        transform: translateY(-140px);
+        transition: transform 0.3s ease;
+    }
+    
+    #sidebar.open {
+        transform: translateY(0);
+    }
+    
+    #map-container {
+        margin-left: 0;
+        margin-top: 200px;
+        height: calc(100vh - 260px);
+    }
+    
+    #header {
+        flex-direction: column;
+        gap: 10px;
+        padding: 15px;
+    }
+}
+
+/* Feature Styles */
+.feature-info-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.feature-info-table td {
+    padding: 5px 8px;
+    border-bottom: 1px solid #eee;
+}
+
+.feature-info-table td:first-child {
+    font-weight: bold;
+    color: #495057;
+}
+
+/* Loading Spinner */
+.loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
